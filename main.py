@@ -1,16 +1,21 @@
 from ursina import*
 from ursina.prefabs.first_person_controller import FirstPersonController
-app = Ursina()
-sky = Sky(texture='sky_sunset')
-ground = Entity(model='plane', collider='box', scale=100, texture='grass', texture_scale=(4,4), position=(0,-2,0))
-player = FirstPersonController()
-class 
+from module import*
+from ursina.shaders import basic_lighting_shader
 
-block = Entity(model='cube', texture='grass', position=(0,0,0), scale=2, rotation=(0,45,0))
-block2 = Entity(model='cube', texture='grass', position=(2,0,0))
-block2 = Entity(model='cube', texture='grass', position=(2,2,0))
-block4 = Entity(model='cube', texture='grass', position=(2,2,2))
-block.x = -1.4
+app = Ursina()      
+
+sky = Sky(texture='sky_sunset')
+map = Map()
+map.new_map()
+player = FirstPersonController(speed=20, jump_height = 60, mouse_sensitivity =Vec2(80,80) )
+
+
+# block = Entity(model='cube', texture='grass', position=(0,0,0), scale=2, rotation=(0,45,0))
+# block2 = Entity(model='cube', texture='grass', position=(2,0,0))
+# block2 = Entity(model='cube', texture='grass', position=(2,2,0))
+# block4 = Entity(model='cube', texture='grass', position=(2,2,2))
+# block.x = -1.4
 
 
 #EditorCamera()
