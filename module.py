@@ -22,8 +22,7 @@ class Map(Entity):
         super().__init__(model=None, colider=None, **kwargs)
         self.bedrock = Entity(model='plane', collider='box', scale=100, texture='grass', texture_scale=(4,4), position=(0,-2,0))
         self.blocks = {}
-        self.noise = PerlinNoise(octaves=3, seed=4255)
-
+        self.noise = PerlinNoise(octaves=4, seed=-329329
 
 
     def new_map(self):
