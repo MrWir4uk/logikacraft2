@@ -9,8 +9,8 @@ app = Ursina()
 from module import*
 sky = Sky(texture='sky_sunset')
 map = Map()
-map.new_map(size=60)
-player = Player(speed=10, jump_height=3)
+map.new_map(size=30)
+player = Player(speed=5, jump_height=2)
 
 
 # block = Entity(model='cube', texture='grass', position=(0,0,0), scale=2, rotation=(0,45,0))
