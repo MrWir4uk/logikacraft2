@@ -1,7 +1,7 @@
 from kivy.uix.recyclegridlayout import defaultdict
 from ursina import*
 from perlin_noise import PerlinNoise
-import random  
+from random import randint
 import os
 from ursina.prefabs.first_person_controller import FirstPersonController
 from ursina.shaders import basic_lighting_shader
@@ -36,16 +36,31 @@ class Tree(Button):
     def __init__(self,pos, **kwargs):
         super().__init__(
             parent=scene, #батькіський обєкт - сцена гри
-            model='cube', #модель куба
-            texture= "assets/minecraft_tree/scene.gltf", #текстура трави
+            model='assets/minecraft_tree/scene.gltf', #модель куба         
             position=pos, #корди обєкта
             scale=5, #розмір
             collider='box', #зіткення з гравцем
-            orogin_y=0.5, #рівень землі
+            origin_y=0.5, #рівень землі
             color=color.color(0,0, random.uniform(0.9, 1)),
             shader=basic_lighting_shader,
             **kwargs
         )
+
+class Flower(Button):
+     
+    def __init__(self,pos, **kwargs):
+        super().__init__(
+            parent=scene, #батькіський обєкт - сцена гри
+            model='assets\kvitka\scene.gltf', #модель куба         
+            position=pos, #корди обєкта
+            scale=1, #розмір
+            
+            origin_y=0.5, #рівень землі
+            color=color.color(0,0, random.uniform(0.9, 1)),
+            shader=basic_lighting_shader,
+            **kwargs
+        )
+
 
 class Map(Entity):
     def __init__(self, **kwargs):
@@ -61,13 +76,20 @@ class Map(Entity):
                 
                 y = floor(self.noise([x/24, z/24])*6)
                 block = Block(0,(x, y ,z))
-                rand_num = random.randit(1,100)
+                rand_num = random.randint(1,100)
                 if rand_num == 71:
-                    Tree(x,y+1,z)
+                    Tree((x,y+1,z))
+
+                rand_num = random.randint(1,50)
+                if rand_num == 21:
+                    Flower((x,y+1,z))
 
 class Player(FirstPersonController):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        self.build_sound = Audio(sound_file_name="assets/audio/gravel.ogg", autoplay=False, volume=0.5)
+        self.destroy_sound = Audio(sound_file_name="assets/audio/stone-effect-254998.mp3", autoplay=False, volume=0.5)
+        self.bg_sound = Audio(sound_file_name="assets/audio/anastimoza-hrizantemi.mp3", volume=1)
         self.hand_block = Entity(parent=camera.ui, model='cube',
                                  texture=block_textures[Block.current], scale=0.2, position=(0.6,-0.42),
                                  shader=basic_lighting_shader, rotation=Vec3(30,-30,10))
@@ -88,6 +110,7 @@ class Player(FirstPersonController):
 
         if key == "left mouse down" and mouse.hovered_entity:
             destroy(mouse.hovered_entity)
+            self.destroy_sound.play()
         if key == "right mouse down" and mouse.hovered_entity:
             hit_info = raycast(camera.world_position, camera.forward, distance=15)
             if hit_info.hit:
