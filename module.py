@@ -5,7 +5,7 @@ from random import randint
 import os
 from ursina.prefabs.first_person_controller import FirstPersonController
 from ursina.shaders import basic_lighting_shader
-
+import pickle
 block_textures = []
 BASE_DIR = os.getcwd()
 BLOCKS_DIR = os.path.join(BASE_DIR, "assets/blocks")
@@ -29,8 +29,8 @@ class Block(Button):
             shader=basic_lighting_shader,
             **kwargs
         )
-
-
+        self.id = block_type
+        scene.blocks([self.x, self.y, self.z]) = self
 class Tree(Button):
      
     def __init__(self,pos, **kwargs):
@@ -45,6 +45,7 @@ class Tree(Button):
             shader=basic_lighting_shader,
             **kwargs
         )
+        scene.trees([self.x, self.y, self.z]) = self
 
 class Flower(Button):
      
@@ -60,14 +61,17 @@ class Flower(Button):
             shader=basic_lighting_shader,
             **kwargs
         )
-
+        scene.flower([self.x, self.y, self.z]) = self
 
 class Map(Entity):
-    def __init__(self, **kwargs):
-        super().__init__(model=None, colider=None, **kwargs)
-        self.bedrock = Entity(model='plane', collider='box', scale=100, texture='grass', texture_scale=(4,4), position=(0,-2,0))
-        self.blocks = {}
+    def __init__(self, player, **kwargs):
+        super()._ty(mode_init__(model=None, colider=None, **kwargs)
+        self.bedrock = Entil='plane', collider='box', scale=100, texture='grass', texture_scale=(4,4), position=(0,-2,0))
+        scene.blocks = {}
+        scene.trees = {}
+        scene.flowers = {}
         self.noise = PerlinNoise(octaves=4, seed=-329329)
+        self.player = Player(speed=5, jump_height=1)
 
 
     def new_map(self, size=30):
@@ -83,6 +87,29 @@ class Map(Entity):
                 rand_num = random.randint(1,50)
                 if rand_num == 21:
                     Flower((x,y+1,z))
+
+    def save(self):
+        game_data = {
+            "player_pos": (self.player.x, self.player.y, self.player.z)
+            "blocks": [],
+            "trees": [],
+            "flowers": []
+        }
+        for block_pos, block in scene.blocks.items():
+            game_data["blocks"].append((block_pos, block.id))
+        
+        for tree_pos, tree in scene.trees.items():
+            game_data["trees"].append(tree_pos)
+
+        for flower_pos, flower in scene.flowers.items():
+            game_data["flowers"].append(flower_pos)
+
+        with open("save.dat", "wb") as f:
+            pickle.dump(game_data, f)
+
+    def input(self,key):
+        if key == "g"
+            self.save()
 
 class Player(FirstPersonController):
     def __init__(self, **kwargs):
