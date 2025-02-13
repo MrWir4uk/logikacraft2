@@ -30,7 +30,7 @@ class Block(Button):
             **kwargs
         )
         self.id = block_type
-        scene.blocks([self.x, self.y, self.z]) = self
+        scene.blocks[(self.x, self.y, self.z)] = self
 class Tree(Button):
      
     def __init__(self,pos, **kwargs):
@@ -45,7 +45,7 @@ class Tree(Button):
             shader=basic_lighting_shader,
             **kwargs
         )
-        scene.trees([self.x, self.y, self.z]) = self
+        scene.trees[(self.x, self.y, self.z)] = self
 
 class Flower(Button):
      
@@ -61,12 +61,12 @@ class Flower(Button):
             shader=basic_lighting_shader,
             **kwargs
         )
-        scene.flower([self.x, self.y, self.z]) = self
+        scene.flowers[(self.x, self.y, self.z)] = self
 
 class Map(Entity):
-    def __init__(self, player, **kwargs):
-        super()._ty(mode_init__(model=None, colider=None, **kwargs)
-        self.bedrock = Entil='plane', collider='box', scale=100, texture='grass', texture_scale=(4,4), position=(0,-2,0))
+    def __init__(self, **kwargs):
+        super().__init__(model=None, colider=None, **kwargs)
+        self.bedrock = Entity(model='plane', collider='box', scale=100, texture='grass', texture_scale=(4,4), position=(0,-2,0))
         scene.blocks = {}
         scene.trees = {}
         scene.flowers = {}
@@ -90,7 +90,7 @@ class Map(Entity):
 
     def save(self):
         game_data = {
-            "player_pos": (self.player.x, self.player.y, self.player.z)
+            "player_pos": (self.player.x, self.player.y, self.player.z),
             "blocks": [],
             "trees": [],
             "flowers": []
@@ -107,8 +107,19 @@ class Map(Entity):
         with open("save.dat", "wb") as f:
             pickle.dump(game_data, f)
 
+    def load(self):
+        with open("save.dat", "rb") as f:
+            game_data = pickle.load (f)
+        for block_pos, block_id in game_data["blocks"]:
+            Block(block_id, block_pos)
+        for tree_pos in game_data["trees"]:
+            Tree(tree_pos)
+        for flower_pos in game_data["flowers"]:
+            Flower(flower_pos)
+        self.player.position = game_data["player_pos"]
+    
     def input(self,key):
-        if key == "g"
+        if key == "g":
             self.save()
 
 class Player(FirstPersonController):
