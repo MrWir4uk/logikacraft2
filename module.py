@@ -6,13 +6,14 @@ import os
 from ursina.prefabs.first_person_controller import FirstPersonController
 from ursina.shaders import basic_lighting_shader
 import pickle
-block_textures = []
-BASE_DIR = os.getcwd()
-BLOCKS_DIR = os.path.join(BASE_DIR, "assets/blocks")
-file_list = os.listdir(BLOCKS_DIR)
-for image in file_list:
-    texture = load_texture('assets/blocks' + os.sep + image)
-    block_textures.append(texture)
+
+block_textures = [] #  Створює пустий список для зберігання текстур блоків.
+BASE_DIR = os.getcwd() # Отримує поточну папку, де запущено код.
+BLOCKS_DIR = os.path.join(BASE_DIR, "assets/blocks") # Визначає шлях до папки з текстурами блоків.
+file_list = os.listdir(BLOCKS_DIR) #  Отримує список файлів (зображень) у цій папці.
+for image in file_list: # Перебирає кожен файл у списку.
+    texture = load_texture('assets/blocks' + os.sep + image) #  Завантажує зображення як текстуру.
+    block_textures.append(texture) # Додає текстуру у список block_textures.
 
 class Block(Button):
     current = 0
