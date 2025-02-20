@@ -9,7 +9,13 @@ app = Ursina()
 from module import*
 sky = Sky(texture='sky_sunset')
 map = Map()
-#map.new_map(size=30)
+try:
+    map.load()
+except:
+    map.new_map(size=30)
+    map.player.y = (0,3,0)
+
+#window.fullscreen = True
 map.load()
 
 

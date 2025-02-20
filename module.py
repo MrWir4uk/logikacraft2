@@ -66,7 +66,7 @@ class Flower(Button):
 class Map(Entity):
     def __init__(self, **kwargs):
         super().__init__(model=None, colider=None, **kwargs)
-        self.bedrock = Entity(model='plane', collider='box', scale=100, texture='grass', texture_scale=(4,4), position=(0,-2,0))
+        scene.bedrock = Entity(model='plane', collider='box', scale=100, texture='stone', texture_scale=(4,4), position=(0,-2,0))
         scene.blocks = {}
         scene.trees = {}
         scene.flowers = {}
@@ -87,6 +87,7 @@ class Map(Entity):
                 rand_num = random.randint(1,50)
                 if rand_num == 21:
                     Flower((x,y+1,z))
+        self.player.position = (size/2, 5, size/2)
 
     def save(self):
         game_data = {
@@ -135,6 +136,12 @@ class Player(FirstPersonController):
     
     def input(self,key):
         super().input(key)
+        if key == "b":
+            self.gravity = 0
+        if key == "v":
+            self.gravity = 1
+
+
         if key == "scroll up":
             Block.current += 1
             if Block.current >= len(block_textures):
@@ -146,7 +153,7 @@ class Player(FirstPersonController):
                 Block.current = len(block_textures)-1
             self.hand_block.texture=block_textures[Block.current]
 
-        if key == "left mouse down" and mouse.hovered_entity:
+        if key == "left mouse down" and mouse.hovered_entity!= scene.bedrock:
             destroy(mouse.hovered_entity)
             self.destroy_sound.play()
         if key == "right mouse down" and mouse.hovered_entity:
