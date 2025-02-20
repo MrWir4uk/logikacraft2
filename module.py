@@ -127,7 +127,7 @@ class Player(FirstPersonController):
         super().__init__(**kwargs)
         self.build_sound = Audio(sound_file_name="assets/audio/gravel.ogg", autoplay=False, volume=0.5)
         self.destroy_sound = Audio(sound_file_name="assets/audio/stone-effect-254998.mp3", autoplay=False, volume=0.5)
-        self.bg_sound = Audio(sound_file_name="assets/audio/anastimoza-hrizantemi.mp3", volume=0.1)
+        self.bg_sound = Audio(sound_file_name="assets/audio/radakan - maria&#039;s theme.ogg", volume=0.1)
         self.hand_block = Entity(parent=camera.ui, model='cube',
                                  texture=block_textures[Block.current], scale=0.2, position=(0.6,-0.42),
                                  shader=basic_lighting_shader, rotation=Vec3(30,-30,10))
